@@ -13,7 +13,7 @@ module seg_display_controller (
 
     wire refresh_tick = (refresh_cnt == 100000);  
 
-    // BCD Conversion
+
     always @(posedge clk or posedge reset) begin
         if (reset) begin
             digit[0] <= 0;
@@ -28,7 +28,6 @@ module seg_display_controller (
         end
     end
 
-    // Refresh counter
     always @(posedge clk) begin
         if (refresh_cnt >= 100000)
             refresh_cnt <= 0;
@@ -36,13 +35,12 @@ module seg_display_controller (
             refresh_cnt <= refresh_cnt + 1;
     end
 
-    // Digit select cycle
     always @(posedge clk) begin
         if (refresh_tick)
             digit_sel <= digit_sel + 1;
     end
 
-    // Drive segments and anodes
+
     always @(*) begin
         case (digit_sel)
             2'd3: begin an = 4'b1110; seg = seg_decoder(digit[0]); dp = 1; end  

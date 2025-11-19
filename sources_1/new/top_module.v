@@ -21,7 +21,6 @@ module top_module (
     wire [7:0] current_setpoint = mode_switch ? user_setpoint : 8'd24;
     reg [27:0] count = 0;
 
-    // UART Receiver
     uart_receiver uart_inst (
         .clk(clk),
         .reset(reset),
@@ -30,7 +29,6 @@ module top_module (
         .data_valid(data_valid)
     );
 
-    // Store latest valid temperature
     always @(posedge clk) begin
         if (data_valid) begin
             temp_data_filtered <= temp_data;
@@ -97,7 +95,6 @@ module top_module (
         .pwm_out(raw_pwm)
     );
 
-    // Fan should only run when temp > setpoint
     wire fan_enable = (temp_data_filtered > current_setpoint);
     assign pwm_fan = fan_enable ? raw_pwm : 1'b0;
 
